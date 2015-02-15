@@ -1,0 +1,107 @@
+<header class="header bg-light lter clearfix b-b b-light">
+	{% if editable %}
+		{% if has_permission('edit pos') %}
+			<a href="{{ site_url('en/pos/save/' ~ pos['pos_id']) }}" onclick="parent.closeFancyboxAndRedirectToUrl('{{ site_url('en/pos/save/' ~ pos['pos_id']) }}');" class="btn btn-sm btn-success"><i class="i i-pencil"></i> Edit</a>
+		{% endif %}
+	{% endif %}
+	{% if action_btns %}
+		<a  href="{{ site_url('en/pos/logs/' ~ pos['device_imei']) }}" class="fancybox activity-box btn btn-sm btn-default" data-fancybox-type="iframe"><i class="fa fa-eye"></i>&nbsp;&nbsp; View Logs</a>
+		{% if pos_status %}
+			{% if pos_status == 'online' %}
+				<span class="label pull-right" style='margin-top: 13px;padding: 8px;background-color: #00b91e;'><i class="fa fa-circle-o"></i>&nbsp;&nbsp;ONLINE</span>
+			{% else %}
+				<span class="label bg-danger pull-right" style='margin-top: 13px;padding: 8px;'><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;OFFLINE</span>
+			{% endif %}
+		{% endif %}
+	{% endif %}
+	{% if unauthorized %}
+        <div class="pull-right" style="margin-top:10px;">
+          {% if activity_key == "edit" %}
+          {{ modal_btn('Authorize', "btn btn-primary btn-sm", "fa fa-check", "en/pos/confirm/pos/committ/" ~ pos['pos_id'] ~ "/" ~ activity_id) }}
+          {% else %} 
+          {{ modal_btn('Authorize', "btn btn-primary btn-sm", "fa fa-check", "en/pos/confirm/pos/authorize/" ~ pos['pos_id'] ~ "/" ~ activity_id) }}
+          {% endif %}
+          &nbsp;
+          {{ modal_btn('Reject', "btn btn-danger btn-sm", "fa fa-times", "en/activity/reject_form/" ~ activity_id) }}
+        </div>
+    {% endif %}
+</header>
+<section class="vbox bg-white">
+	<section class="scrollable wrapper-lg">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="text-center" style="font-size:100px;">
+					
+					<i class="fa fa-tablet"></i>
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h4 class="font-bold m-b-none m-t-none">{{ pos['pos_name']|upper }}</h4>
+				<p></p>
+				<p><i class="fa fa-lg fa-home m-r-sm"></i><strong>{{ pos['municipal']|upper }} </strong>
+				</p>
+				<ul class="nav nav-pills nav-stacked">
+					<li class="bg-light"><a href="#"> <strong>Device IMEI: </strong>&nbsp;{{  pos['device_imei'] }} </a>
+					</li>
+					<li class="bg-light"><a href="#"> <strong>Serial No:</strong> &nbsp;{{  pos['serial_no'] }}</a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+		<div class="line b-b m-t m-b"></div>
+		<div class="row">
+		{% for key, functions in properties %}
+		    
+		      <div class="col-sm-6">
+		        <section class="panel panel-default">
+		          <header class="panel-heading"> {{ lang(key)|upper }} </header>
+		          <table class="table table-striped m-b-none">
+		            <tbody>
+		            {% for function in functions %}
+		              <tr>
+		               <td>{{ function['property_value']|title }}</td>
+		              </tr>
+		            {% endfor %}
+		            </tbody>
+		          </table>
+		        </section>
+		      </div>
+		    
+		{% endfor %}
+		</div>
+		<div class="line b-b m-t m-b"></div>
+
+		<div class="wrapper m-b" style="margin-bottom: 80px;">
+			<div class="row m-b">
+				<div class="col-xs-6"> <small>Created By</small>
+					<div class="text-lt font-bold">{{ pos['created_by']|upper }}</div>
+				</div>
+				<div class="col-xs-6"> <small>Date Created</small>
+					<div class="text-lt font-bold">{{ prepare_date(pos['created']) }}</div>
+				</div>
+			</div>
+			{% if not unauthorised %}
+				<div class="row m-b">
+					<div class="col-xs-6"> <small>Authorised By</small>
+						<div class="text-lt font-bold">{{ pos['authorised_by']|upper }}</div>
+					</div>
+					<div class="col-xs-6"> <small>Date Authorised</small>
+						<div class="text-lt font-bold">{{ prepare_date(pos['authorised']) }}</div>
+					</div>
+				</div>
+			{% endif %}
+			{% if rejected %}
+				<div class="row m-b">
+					<div class="col-xs-6"> <small>Rejected By</small>
+						<div class="text-lt font-bold">{{ pos['rejected_by']|upper }}</div>
+					</div>
+					<div class="col-xs-6"> <small>Date Rejected</small>
+						<div class="text-lt font-bold">{{ prepare_date(pos['rejected']) }}</div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</section>
+</section>

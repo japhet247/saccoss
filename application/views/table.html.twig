@@ -1,0 +1,27 @@
+<section class="panel panel-default">
+  <header class="panel-heading"> {{ table_title }} <i class="fa fa-info-sign text-muted" data-toggle="tooltip" data-placement="bottom" data-title="ajax to load the data."></i> </header>
+  <div class="table-responsive">
+    <table class="table table-striped m-b-none" data-ride="datatables">
+      <thead>
+        <tr>
+          {% for field in columns %}
+              <th>{{ lang(field)|title }}</th>
+          {% endfor %}
+          {{ (action_btn) ? '<th>Action</th>' }}
+        </tr>
+      </thead>
+      <tbody>
+        {% for data in rows %}
+          <tr>
+            {% for field in columns %}
+              <td>{{ data[field] }}</td>
+            {% endfor %}
+            {% if action_btn %}
+
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>

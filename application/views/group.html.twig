@@ -1,0 +1,58 @@
+{% extends "includes/_layout.html.twig" %}
+
+{% block title %} {{ title|upper }} {% endblock %}
+
+
+{% block main %}
+<section style="width: 20% !important;" class="vbox groups" >
+        <header class="header clearfix bg b-b b-light">
+            <form method="post" action="#">
+                <div class="input-group m-t-sm" style="width: 100%;">
+                    <input id="search-group" type="text" class="input-sm form-control" style="width: 100%;" placeholder="Search"> <span class="input-group-btn">  </span>
+                </div>
+            </form>
+        </header>
+        <section class="scrollable hover">
+            <div class="list-group no-radius no-border no-bg m-t-n-xxs m-b-none groups-inner">
+            <ul class="list-group no-radius no-border no-bg m-t-n-xxs m-b-none" id="group-list" >
+                {% for field in groups %}
+                    {% if check_permission %}
+                        {% if has_permission("view " ~ strtolower(field['value'])) %}
+    		             <li>
+    		              <a href="#" style="border-bottom: none;" id="{{ site_url(field['link']) }}" class="list-group-item {{  (field['link']) ? "load-content-ajax" : "" }}"> {{ field['value'] | upper }} </a>
+    		             </li>
+                        {% endif %}
+                     {% else %}
+                        <li>
+                          <a href="#" style="border-bottom: none;" id="{{ site_url(field['link']) }}" class="list-group-item {{  (field['link']) ? "load-content-ajax" : "" }}"> {{ field['value'] | upper }} </a>
+                         </li>
+                    {% endif %}
+                {% endfor %}
+             </ul> 
+             
+            </div>
+        </section>
+</section>
+<section style="width: 20% !important; left: 20%" class="vbox cats" id="extend">
+
+</section>
+
+<section style="width: 60% !important; left: 40%" class="vbox profile" id="final">
+
+</section>
+
+<script>
+    jQuery(document).ready(function(){
+	    $('#extend,#final').hide();
+	    load_cats('#extend');
+	});//end
+</script>
+<script src="{{ base_url() }}admin/js/domsearch.js"></script>
+<script src="{{ base_url() }}admin/js/liquidMetal.js"></script>
+<script>
+    $(function(){
+       $('#search-group').domsearch('#group-list');
+    });
+</script>
+
+{% endblock %}

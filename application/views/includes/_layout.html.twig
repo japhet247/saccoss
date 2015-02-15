@@ -1,0 +1,446 @@
+{% extends "includes/_core.html.twig" %}
+
+{% block css %}
+    <style>
+        .dataTables_length,.dataTables_info{
+            float: left;
+        }
+    </style>
+    
+    <link rel="stylesheet" href="{{ base_url() }}admin/js/datatables/datatables.css" type="text/css"/>
+    <link rel="stylesheet" href="{{ base_url() }}admin/js/chosen/chosen.css" type="text/css">
+    <link rel="stylesheet" href="{{ base_url() }}admin/css/jquery.datetimepicker.css" type="text/css">
+    <link rel="stylesheet" href="{{ base_url() }}admin/js/fancybox/jquery.fancybox.css" type="text/css">
+
+    
+{% endblock %}
+
+{% block content %}
+    <section class="vbox">
+        {% block header %}
+            <header class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
+                <div class="navbar-header aside-md dk"> <a class="btn btn-link visible-xs" > <i class="fa fa-bars"></i> </a> <a href="{{ base_url() }}" class="navbar-brand"><img src="{{ base_url() }}admin/images/logo.png" class="m-r-sm"></a> <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user"> <i class="fa fa-cog"></i> </a> </div>
+                <ul class="nav navbar-nav hidden-xs">
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="i i-grid"></i> </a>
+                    <section class="dropdown-menu aside-lg bg-white on animated fadeInLeft">
+                      <div class="row m-l-none m-r-none m-t m-b text-center">
+                      
+                      
+                        <div class="col-xs-4">
+                          <div class="padder-v"> <a href="{{ base_url() }}"> <span class="m-b-xs block"> <i class="i i-home i-2x text-info-lt"></i> </span> <small class="text-muted">Dashboard</small> </a> </div>
+                        </div>
+                      
+                        {% block quicknav %}
+                        
+                        {% endblock %}
+                  
+                      </div>
+                    </section>
+                  </li>
+                </ul>
+                <ul class="nav navbar-nav hidden-xs">
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-search"></i> </a>
+                    <section class="dropdown-menu aside-lg bg-white on animated fadeInLeft" style="padding: 15px;">
+                      <div class="row m-l-none m-r-none m-t m-b text-center">
+                        <form data-validate="parsley" method="post" action="#">
+                            <div class="form-group"> 
+                                <select name="search_filter" class="form-control" data-required="true">
+                                    <option value="">--Filter Search--</option>
+                                </select> 
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="search_key" placeholder="Name, phone, account" class="form-control" data-required="true">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-xs pull-right" style="padding: 5px 10px;"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</button>
+                            
+                        </form>
+                      </div>
+                    </section>
+                  </li>
+                </ul>
+                
+                <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user user">
+                  {% set notif_count = count(notifications) %}
+                   {% if notif_count %} 
+                    <li class="hidden-xs"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="i i-chat3"></i> 
+                    <span class="badge badge-sm up bg-danger count">{{ notif_count }}</span> </a>
+                    <section class="dropdown-menu aside-xl animated flipInY">
+                      <section class="panel bg-white">
+                        <header class="panel-heading b-light bg-light"> <strong>You have <span class="count">{{ notif_count }}</span> notifications</strong> </header>
+                        <div class="list-group list-group-alt"> 
+                          {% for notif in notifications %} 
+                          
+                            {% if is_settings_edit(notif['activity_key']) or is_card_unblocking(notif['activity_key']) or is_commission_account(notif['activity_key']) %}
+                            <a  href="{{ site_url('en/activity/pending') }}" class="media list-group-item" style="display: block;">
+                            {% else %}      
+                            <a  href="{{ site_url('en/' ~ notif['uri'] ~ '/' ~ notif['content_id'] ~ '/' ~ notif['activity_id']) }}" class="media list-group-item fancybox activity-box" data-fancybox-type="iframe" style="display: block;">
+                            {% endif %}
+                                <span class="media-body block m-b-none">
+                                    {{ notif['message'] | raw }}
+                                </span>
+                                
+                            </a>
+                          {% endfor %}
+                        </div>
+                        <footer class="panel-footer text-sm"> <a href="#" class="pull-right"><i class="fa fa-cog"></i></a> <a href="#notes" data-toggle="class:show animated fadeInRight">See all the notifications</a> </footer>
+                      </section>
+                    </section>
+                  </li>
+                  {% endif %}
+                  <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="thumb-sm avatar pull-left"> <img src="{{ base_url() }}admin/images/avatar_default.jpg"> </span> {{ full_name|title }} <b class="caret"></b> </a>
+                    <ul class="dropdown-menu animated fadeInRight">
+                      <span class="arrow top"></span>
+                      <!--<li> <a href="#">My Profile</a> </li>-->
+                      <li> <a href="{{ site_url('en/dashboard/change_password') }}">Change Password</a> </li>
+                      <li class="divider"></li>
+                      <li> <a href="{{ site_url('en/dashboard/logout') }}">Logout</a> </li>
+                    </ul>
+                  </li>
+                </ul>
+          </header>
+        {% endblock %}
+        <section>
+            <section class="hbox stretch">
+                {% block aside %}
+                
+                    <!-- .aside -->
+                  <aside class="bg-black aside-md hidden-print" id="nav">
+                    <section class="vbox">
+                      <section class="w-f scrollable">
+                          <nav class="nav-primary hidden-xs">
+                            <div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
+                            <ul class="nav nav-main" data-ride="collapse">
+                              {% if has_permission('view dashboard') %}
+                                <li class="#"> <a href="{{ site_url('en/dashboard') }}" class="auto"> <i class="fa fa-home icon"> </i> <span class="font-bold">Dashboard</span> </a> </li>
+                              {% endif %}
+
+                              {% if has_permission('view activities') %}
+                             <li class="#"> <a href="#" class="auto"> <span class="pull-right text-muted"> <i class="i i-arrow-down4 text"></i> <i class="i i-circle-sm text-active"></i> </span>  <i class="fa fa-bars icon"> </i> <span class="font-bold">Activities</span> </a>
+                                <ul class="nav dk">
+                                  {% if has_permission('view authorized activities') %}
+                                  <li class="#"> <a href="{{ site_url('en/activity/authorized') }}" class="auto"> <i class="fa fa-check"></i> <span>Authorized Activities</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view pending activities') %}
+                                  <li class="#"> <a href="{{ site_url('en/activity/pending') }}" class="auto"> <i class="fa fa-clock-o"></i> <span>Pending Activities</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view failed activities') %}
+                                  <li class="#"> <a href="{{ site_url('en/activity/failed') }}" class="auto"> <i class="fa fa-times"></i> <span>Failed Activites</span> </a> </li>
+                                  {% endif %}
+                                </ul>
+                              </li>
+                            {% endif %}
+                              {% if has_permission('view user') %}
+                             <li class="#"> <a href="#" class="auto"> <span class="pull-right text-muted"> <i class="i i-arrow-down4 text"></i> <i class="i i-circle-sm text-active"></i> </span>  <i class="fa fa-users icon"> </i> <span class="font-bold">System Users</span> </a>
+                                <ul class="nav dk">
+                                  {% if has_permission('add user') %}
+                                  <li class="#"> <a href="{{ site_url('en/user/save') }}" class="auto"> <i class="fa fa-plus"></i> <span>Add New System User</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('add pos teller') %}
+                                  <li class="#"> <a href="{{ site_url('en/teller/save') }}" class="auto"> <i class="fa fa-plus"></i> <span>Add New POS Teller</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('add profile') %}
+                                  <li class="#"> <a href="{{ site_url('en/role/save') }}" class="auto"> <i class="fa fa-plus"></i> <span>Add New Profile</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('add signature') %}
+                                  <li class="#"> <a href="{{ site_url('en/signature/save') }}" class="auto"> <i class="fa fa-picture-o"></i> <span>Add User Signature</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view profile') %}
+                                  <li class="#"> <a href="{{ site_url('en/role/all') }}" class="auto"> <i class="fa fa-users"></i> <span>All User Profiles</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view pos teller') %}
+                                  <li class="#"> <a href="{{ site_url('en/teller/all') }}" class="auto"> <i class="fa fa-users"></i> <span>All POS Tellers</span> </a> </li>
+                                  {% endif %}
+	                                <li class="#"> <a href="{{ site_url('en/user/all') }}" class="auto"> <i class="fa fa-eye"></i> <span>All System Users</span> </a> </li>
+                                </ul>
+                              </li>
+                            {% endif %}
+                            {% if has_permission('view municipal') %}
+                              <li class="#"> <a href="#" class="auto"> <span class="pull-right text-muted"> <i class="i i-arrow-down4 text"></i> <i class="i i-circle-sm text-active"></i> </span>  <i class="fa fa-sitemap icon"> </i> <span class="font-bold">Municipal</span> </a>
+                                <ul class="nav dk">
+                                  {% if has_permission('add municipal') %}
+                                  <li class="#"> <a href="{{ site_url('en/municipal/save') }}" class="auto"> <i class="fa fa-plus"></i> <span>Add Municipal</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('add municipal account') %}
+                                  <li class="#"> <a href="{{ site_url('en/account/save') }}" class="auto"> <i class="fa  fa-credit-card"></i> <span>Add Municipal A/C</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view municipal user') %}
+                                  <li class="#"> <a href="{{ site_url('en/municipal/users') }}" class="auto"> <i class="fa fa-users"></i> <span>View Municipals users</span> </a> </li>
+                                  {% endif %}
+                                  <li class="#"> <a href="{{ site_url('en/municipal/all') }}" class="auto"> <i class="fa fa-eye"></i> <span>View Municipals</span> </a> </li>
+                                </ul>
+                              </li>
+                            {% endif %}
+
+                            {% if has_permission('municipal payments') %}
+                              <li class="#"> <a href="#" class="auto"> <span class="pull-right text-muted"> <i class="i i-arrow-down4 text"></i> <i class="i i-circle-sm text-active"></i> </span>  <i class="fa fa-money icon"> </i> <span class="font-bold">Municipal Payments</span> </a>
+                                <ul class="nav dk">
+                                  {% if has_permission('add municipal cheque') %}
+                                  <li class="#"> <a href="{{ site_url('en/cheque/add') }}" class="auto"> <i class="fa fa-plus"></i> <span>Add Cheque File</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view cheque files') %}
+                                  <li class="#"> <a href="{{ site_url('en/cheque/files') }}" class="auto"> <i class="fa fa-file"></i> <span>Cheque Files</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view approved cheque') %}
+                                  <li class="#"> <a href="{{ site_url('en/cheque/approved') }}" class="auto"> <i class="i i-file-check"></i> <span>Approved Cheques</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view pending cheque') %}
+                                  <li class="#"> <a href="{{ site_url('en/cheque/pending') }}" class="auto"> <i class="i i-file-plus"></i> <span>Pending Cheques</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view failed cheque') %}
+                                  <li class="#"> <a href="{{ site_url('en/cheque/rejected') }}" class="auto"> <i class="i i-file-remove"></i> <span>Rejected Cheques</span> </a> </li>
+                                  {% endif %}
+                                </ul>
+                              </li>
+                            {% endif %}
+                            {% if has_permission('view transactions') %}
+                              <li class="#"> <a href="#" class="auto"> <span class="pull-right text-muted"> <i class="i i-arrow-down4 text"></i> <i class="i i-circle-sm text-active"></i> </span>  <i class="fa fa-exchange icon"> </i> <span class="font-bold">Daily TXS</span> </a>
+                                <ul class="nav dk">
+                                  {% if has_permission('view inquiry transactions') %}
+                                  <li class="#"> <a href="{{ site_url('en/transactions/inquiries') }}" class="auto"> <i class="fa fa-external-link"></i> <span>Inquiries</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view fund transfers') %}
+                                  <li class="#"> <a href="{{ site_url('en/transactions/ft') }}" class="auto"> <i class="fa fa-random"></i> <span>Fund Transfers</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view bills transactions') %}
+                                  <li class="#"> <a href="{{ site_url('en/transactions/bills') }}" class="auto"> <i class="i i-file-check"></i> <span> Bills </span> </a> </li>
+                                  {% endif %}
+                                </ul>
+                              </li>
+                            {% endif %}
+
+                            {% if has_permission('view pos') %}
+                              <li class="#"> <a href="#" class="auto"> <span class="pull-right text-muted"> <i class="i i-arrow-down4 text"></i> <i class="i i-circle-sm text-active"></i> </span>  <i class="fa fa-tablet icon"> </i> <span class="font-bold">POS</span> </a>
+                                <ul class="nav dk">
+                                  {% if has_permission('add pos') %}
+                                  <li class="#"> <a href="{{ site_url('en/pos/save') }}" class="auto"> <i class="fa fa-plus"></i> <span>Add New POS</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('add commission account') %}
+                                  <li class="#"> <a href="{{ site_url('en/commission_account/save') }}" class="auto"> <i class="fa fa-plus"></i> <span>Add Commission Account</span> </a> </li>
+                                  {% endif %}
+                                   
+                                  <li class="#"> <a href="{{ site_url('en/pos/all') }}" class="auto"> <i class="fa fa-eye"></i> <span>View POS</span> </a> </li>
+                                  {% if has_permission('assign pos') %}
+                                  <li class="#"> <a href="{{ site_url('en/assignment/pos') }}" class="auto"> <i class="fa fa-arrows"></i> <span>Assign POS</span> </a> </li>
+                                  {% endif %} 
+                                  {% if has_permission('view pos assignment') %}
+                                  <li class="#"> <a href="{{ site_url('en/assignment') }}" class="auto"> <i class="fa fa-eye"></i> <span>POS Assignments</span> </a> </li>
+                                  {% endif %} 
+                                  {% if has_permission('view commission account') %}
+                                  <li class="#"> <a href="{{ site_url('en/commission_account/all') }}" class="auto"> <i class="fa fa-eye"></i> <span>View Commission Accounts</span> </a> </li>
+                                  {% endif %} 
+                                </ul>
+                              </li>
+                            {% endif %}
+                            {% if has_permission('view cards') %}
+                             <li class="#"> <a href="#" class="auto"> <span class="pull-right text-muted"> <i class="i i-arrow-down4 text"></i> <i class="i i-circle-sm text-active"></i> </span>  <i class="fa fa-credit-card icon"> </i> <span class="font-bold">Cards</span> </a>
+                                <ul class="nav dk">
+                                  {% if has_permission('add vault cards') %}
+                                  <li class="#"> <a href="{{ site_url('en/cards/save') }}" class="auto"> <i class="fa fa-plus"></i> <span>Add Vault Cards</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view vault cards') %}
+                                  <li class="#"> <a href="{{ site_url('en/cards/all') }}" class="auto"> <i class="fa fa-clock-o"></i> <span>All Vault Cards</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('block cards') %}
+                                  <li class="#"> <a href="{{ site_url('en/cards/blocked') }}" class="auto"> <i class="fa fa-times"></i> <span>Blocked Cards</span> </a> </li>
+                                  {% endif %}
+                                </ul>
+                              </li>
+                            {% endif %}
+                            {% if has_permission('view referals') %}
+                             <li class="#"> <a href="#" class="auto"> <span class="pull-right text-muted"> <i class="i i-arrow-down4 text"></i> <i class="i i-circle-sm text-active"></i> </span>  <i class="fa fa-mail-reply-all icon"> </i> <span class="font-bold">Referals</span> </a>
+                                <ul class="nav dk">
+                                  {% if has_permission('view authorized referals') %}
+                                  <li class="#"> <a href="{{ site_url('en/referal/authorized') }}" class="auto"> <i class="fa fa-check"></i> <span>Authorized Referals</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view pending referals') %}
+                                  <li class="#"> <a href="{{ site_url('en/referal/pending') }}" class="auto"> <i class="fa fa-clock-o"></i> <span>Pending Referals</span> </a> </li>
+                                  {% endif %}
+                                  {% if has_permission('view rejected referals') %}
+                                  <li class="#"> <a href="{{ site_url('en/referal/rejected') }}" class="auto"> <i class="fa fa-times"></i> <span>Rejected Referals</span> </a> </li>
+                                  {% endif %}
+                                </ul>
+                              </li>
+                            {% endif %}
+                            {% if has_permission('view reports') %}
+                              <li class="#"> <a href="{{ site_url('en/reports/all') }}" class="auto"> <i class="fa fa-file-text icon"> </i> <span class="font-bold">Reports</span> </a>
+                                
+                              </li>
+                            {% endif %}
+                            {% if has_permission('view system settings') %}
+                                <li class="#"> <a href="{{ site_url('en/settings') }}" class="auto"> <i class="fa fa-cogs icon"> </i> <span class="font-bold">TMS Settings</span> </a> </li>
+                              {% endif %}
+                              
+                             
+                            </ul>
+                           
+                          </nav>
+                          <!-- / nav -->
+                         
+                      </section>
+                      <footer class="footer hidden-xs no-padder text-center-nav-xs">  <a href="#nav" data-toggle="class:nav-xs" id="hide_nav" class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs"> <i class="i i-circleleft text"></i> <i class="i i-circleright text-active"></i> </a> </footer>
+                    </section>
+                  </aside>
+                  <!-- /.aside -->
+        
+                {% endblock %}
+                <section id="content">
+                    <section class="vbox">
+                    
+                        {% block main %}
+        
+                        {% endblock %}
+    
+{% endblock %}
+
+    {% block footer %}
+                        <footer class="footer bg-white b-t b-light">
+                            <div class="text-center" style="padding-top: 15px;">
+                                <p> <small>&copy; 2014. CRDB Bank PLC</small> </p>
+                            </div>
+                        </footer>
+                    </section>
+                </section>
+            </section>
+        </section>
+    </section>
+    
+        <a style="display: none;" href="#message" class="manual-box"></a>             
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden="true">
+            <div class="modal-dialog">
+                <!--<div class="modal-content">
+             
+                    
+                </div>-->
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <div id="loadingText" style="display:none;">
+            <p style="text-align: center;position: absolute;">Loading...</p>
+        </div>
+        <div id="loadingImage" style="display:none;">
+          <div id="loadingGif">
+              <div></div>
+          </div>
+        </div>
+
+        <div id="message" >
+        </div>
+    
+    {% endblock %}
+
+    {% block script %}
+        {{ parent() }}
+        <script src="{{ base_url() }}admin/js/datatables/jquery.dataTables.min.js"></script>
+        <script src="{{ base_url() }}admin/js/jquery.datetimepicker.js"></script>
+        <script src="{{ base_url() }}admin/js/fancybox/jquery.fancybox.pack.js"></script>
+        <script src="{{ base_url() }}admin/js/chosen/chosen.jquery.min.js"></script>
+        <script src="{{ base_url() }}admin/js/ajaxForm.js"></script>
+        <script src="{{ base_url() }}admin/js/apps/custom.js"></script>
+        <script src="{{ base_url() }}admin/js/domsearch.js"></script>
+        <script src="{{ base_url() }}admin/js/liquidMetal.js"></script>
+        
+        <script>
+            $('[data-ride="datatables"]').dataTable( {
+        			"sPaginationType": "full_numbers",
+                    "aaSorting": []
+      		} );
+            
+            $(document).ready(function(){
+                $(".fancybox").fancybox({
+                    iframe : {
+                        preload: true
+                    }
+                });
+                $(".fancyboxfull").fancybox({
+                    width: 1200,
+                    iframe : {
+                        preload: true
+                    }
+               
+                });
+                $(".activity-box").fancybox({
+                    iframe : {
+                        preload: true
+                    },
+                    afterClose : function() {
+                        location.reload();
+                        return;
+                    }
+                });
+                $(".manual-box").fancybox({
+                    minWidth: 850,
+                    width: 1200,
+                    afterLoad   : function() {
+                        this.content = this.content.html();
+                    }
+                }); 
+                
+                $('#search-pos').domsearch('table#pos_allocation', {criteria: 'td.terminal_id, td.sn'}); 
+                
+                $('#payment_type').on('change', function(){
+                    value = $('#payment_type :selected').val();
+                    if(value == 'other'){
+                        $('#trans_description').slideDown();
+                    }else{
+                        $('#trans_description').slideUp();
+                    }
+                });//end on
+                {% if trigger_box %}
+                  $(".manual-box").eq(0).trigger('click');
+                {% endif %}
+
+                {% if hide_nav %}
+                  $("#hide_nav").eq(0).trigger('click');
+                {% endif %}
+            });
+            
+            function closeFancyboxAndRedirectToUrl(url){
+                $.fancybox.close();
+                window.location = url;
+            }
+
+            function authorize(btn){
+              var cheque = btn.id;
+              var reply = confirm('You are about to confirm cheque no '+cheque+ '?');
+              if(reply == true){
+                $('#chq'+cheque).html('Approving...');
+                $.ajax({
+                  url: "{{ site_url('en/cheque/authorize') }}",
+                  data: {cheque_no : cheque},
+                  type: "POST",
+                  success: function(data){
+                    $('#chq'+cheque).html(data);
+                  }
+                });
+              }
+            }
+
+            function reject(btn){
+              var cheque = btn.id;
+              var reply = confirm('You are about to reject cheque no '+cheque+ '?');
+              if(reply == true){
+                $('#chq'+cheque).html('Rejecting...');
+                $.ajax({
+                  url: "{{ site_url('en/cheque/reject') }}",
+                  data: {cheque_no : cheque},
+                  type: "POST",
+                  success: function(data){
+                    $('#chq'+cheque).html(data);
+                  }
+                });
+              }
+            }
+
+            $('#my-datatable').on('click', '.delegated-popup-btn', function(){
+                  $('.modal-dialog').html($('#loadingImage').html());
+                  $.ajax({
+                      url:$(this).attr('id'),
+                      success:function(data){
+                          $('.modal-dialog').html(data);
+                      }
+                  });
+             });//end click 
+
+        </script>
+    {% endblock %}

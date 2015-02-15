@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+    <head>
+
+        {% block head %}
+
+            <meta name="description" content="" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+            <link rel="stylesheet" href="{{ base_url() }}admin/css/app.v1.css" type="text/css" />
+            <!--[if lt IE 9]> <script src="{{ base_url() }}admin/js/ie/html5shiv.js"></script> <script src="{{ base_url()  }}admin/js/ie/respond.min.js"></script> <script src="{{ base_url()  }}admin/js/ie/excanvas.js"></script> <![endif]-->
+            <script src="{{ base_url() }}admin/js/app.v1.js"></script>
+            {% block css %}{% endblock %}
+            <title>{% block title %}{% endblock %} | CRDB TMS</title>
+
+        {% endblock %}
+
+    </head>
+    <body>
+       
+    {% block content %}{% endblock %}
+        
+        
+    {% block footer %}
+        <footer id="footer">
+          <div class="text-center padder">
+            <p> <small>CRDB Bank PLC. All Rights Reserved<br>
+              &copy; 2014</small> </p>
+          </div>
+        </footer>
+    {% endblock %}
+    
+    {% block script %}
+        <script src="{{ base_url() }}admin/js/app.plugin.js"></script>
+        <script src="{{ base_url() }}admin/js/parsley/parsley.min.js"></script>
+        <script src="{{ base_url() }}admin/js/parsley/parsley.extend.js"></script>  
+    {% endblock %} 
+        
+    </body>
+</html>

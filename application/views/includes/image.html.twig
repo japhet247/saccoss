@@ -1,0 +1,59 @@
+{% if activity_id %}
+<header class="header bg-light lter clearfix b-b b-light">
+	
+	{% if unauthorized %}
+		
+        <div class="pull-right" style="margin-top:10px;">
+          {{ modal_btn('Authorize', "btn btn-primary btn-sm", "fa fa-check", "en/signature/confirm/signature/authorize/" ~ sign['sign_id'] ~ "/" ~ activity_id) }}
+          {{ modal_btn('Reject', "btn btn-danger btn-sm", "fa fa-times", "en/activity/reject_form/" ~ activity_id) }}
+        </div>
+    {% endif %}
+</header>
+<section class="vbox bg-white">
+	<section class="scrollable wrapper-lg">
+		<div class="row">
+			<div class='custom_img'>
+				<img src = "{{ set_sign_path(sign['sign_file']) }}" />
+			</div>
+		</div>
+		<div class="line b-b m-t m-b"></div>
+
+		<div class="wrapper m-b">
+			<div class="row m-b">
+				<div class="col-xs-6"> <small>Created By</small>
+					<div class="text-lt font-bold">{{ sign['created_by']|upper }}</div>
+				</div>
+				<div class="col-xs-6"> <small>Date Created</small>
+					<div class="text-lt font-bold">{{ prepare_date(sign['created']) }}</div>
+				</div>
+			</div>
+			{% if not unauthorised %}
+				{% if sign['authorised_by'] %}
+					<div class="row m-b">
+						<div class="col-xs-6"> <small>Authorised By</small>
+							<div class="text-lt font-bold">{{ sign['authorised_by']|upper }}</div>
+						</div>
+						<div class="col-xs-6"> <small>Date Authorised</small>
+							<div class="text-lt font-bold">{{ prepare_date(sign['authorised']) }}</div>
+						</div>
+					</div>
+				{% endif %}
+			{% endif %}
+			{% if rejected %}
+				<div class="row m-b">
+					<div class="col-xs-6"> <small>Rejected By</small>
+						<div class="text-lt font-bold">{{ sign['rejected_by']|upper }}</div>
+					</div>
+					<div class="col-xs-6"> <small>Date Rejected</small>
+						<div class="text-lt font-bold">{{ prepare_date(sign['rejected']) }}</div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</section>
+</section>
+{% else %}
+	<div class='custom_img'>
+		<img src = "{{ image_src }}" />
+	</div>
+{% endif %}

@@ -1,0 +1,91 @@
+{% extends "includes/_layout.html.twig" %}
+
+{% block title %} {{ title|upper }} {% endblock %}
+
+{% block main %}
+
+	<header class="header bg-white b-b clearfix">
+        <div class="row m-t-sm">
+            <div class="col-sm-8 m-b-xs"> 
+                <h5 style="font-weight:bold;">{{ page_title }}</h5>
+            </div>
+        </div>
+    </header>
+
+{% block status_bar %}
+
+	<section>
+        <section class="hbox stretch">
+            <section>
+                <section class="vbox">
+                  <section class="scrollable wrapper">
+                  		{% if tabs %}
+						<div class="row">
+					        <div class="col-sm-12">
+					            <div class="panel b-a">
+					                <div class="row m-n">
+					                    <div class="col-md-4 b-b b-r">
+					                        <a href="{{ tabs['first']['link'] }}" class="block padder-v hover"> <span class="i-s i-s-2x pull-left m-r-sm"> <i class="i i-hexagon2 i-s-base {{ tabs['first']['text'] }} hover-rotate 
+					                        	{{ tabs['first']['class'] }}" style="color: #00b91e;"></i> <i class="i 
+					                        	{{ tabs['first']['icon'] }} i-1x text-white"></i> </span>  <span class="clear"> <span class="h3 block m-t-xs {{ tabs['first']['text'] }}" style="color: #00b91e;">
+					                        	{{ tabs['first']['value'] }}</span>  <small class="text-muted text-u-c">
+					                        	{{ tabs['first']['status']|upper }}</small> 
+					                            </span>
+					                        </a>
+					                    </div>
+					                    <div class="col-md-4 b-b b-r">
+					                        <a href="{{ tabs['second']['link'] }}" class="block padder-v hover"> <span class="i-s i-s-2x pull-left m-r-sm"> <i class="i i-hexagon2 i-s-base {{ tabs['second']['text'] }} hover-rotate
+					                        	{{ tabs['second']['class'] }}"></i> <i class="i 
+					                        	{{ tabs['second']['icon'] }} i-sm text-white"></i> </span>  <span class="clear"> <span class="h3 block m-t-xs {{ tabs['second']['text'] }}">
+					                        	{{ tabs['second']['value'] }}</span>  <small class="text-muted text-u-c">
+					                        	{{ tabs['second']['status']|upper }}</small> 
+					                            </span>
+					                        </a>
+					                    </div>
+					                    <div class="col-md-4 b-b">
+					                        <a href="{{ tabs['third']['link'] }}" class="block padder-v hover"> <span class="i-s i-s-2x pull-left m-r-sm"> <i class="i i-hexagon2 i-s-base {{ tabs['third']['text'] }} hover-rotate {{ tabs['third']['class'] }}"></i> <i class="i 
+					                        	{{ tabs['third']['icon'] }} i-sm text-white"></i> </span>  <span class="clear"> <span class="h3 block m-t-xs {{ tabs['third']['text'] }}">
+					                        	{{ tabs['third']['value'] }}</span> <small class="text-muted text-u-c">
+					                        	{{ tabs['third']['status']|upper }}</small> 
+					                            </span>
+					                        </a>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+						{% endif %}
+					{% endblock %}
+
+					{% block menus %}
+
+						<div class="row">          
+					        <div class="col-sm-8" style="margin-left: 18%;">
+					        	<section class="aside-xlg bg-white on animated fadeInLeft">
+					          		<div class="row m-l-none m-r-none m-t m-b text-center">
+
+										{% for link in dashboard_links %}
+											<div class="col-xs-4">
+											   	<div class="padder-v"> 
+											   		<a href="{{ link['url'] }}"> 
+											   			<span class="m-b-xs block"> 
+											   				<i class="i {{ link['icon'] }} i-3x {{ link['class'] }}"></i> 
+											   			</span> 
+											   			<small class="text-muted">{{ link['name'] }}</small> 
+											   		</a> 
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</section>
+							</div>
+						</div>
+					{% endblock %}
+
+				</section>
+            </section>
+          </section>
+        </section>
+    </section>
+
+{% endblock %}

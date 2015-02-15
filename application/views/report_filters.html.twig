@@ -1,0 +1,59 @@
+
+
+<section class="scrollable wrapper w-f">
+    <section class="panel panel-default" style="border: none;">
+      
+        
+            <div class="col-sm-12 test" >
+                {{ message|raw }}
+                <form class="form-horizontal reports-form" id="reports_form" method="post" action="{{ site_url(filter_link) }}" data-validate="parsley"> 
+                    <section class="panel panel-default">
+                        <header class="panel-heading"> Generate Report Below <strong></strong> 
+                        </header>
+                        <div class="panel-body">
+
+                        {% include "forms/filters/" ~ report_filter ~ ".html.twig" %} 
+                      </div>
+                        <footer class="panel-footer text-right bg-light lter">  
+                            <button type="submit" class="btn btn-primary btn-s-xs">Generate</button>
+                        </footer>
+                    </section>
+                </form>
+            </div>
+        
+    </section>
+</section>
+
+<script>
+    $(function(){
+        $(".chosen-select").length && $(".chosen-select").chosen({width:'100%'});
+        $('.datepicker').datetimepicker({
+          timepicker:false,
+          format:'Y-m-d',
+          validateOnBlur:true
+        });
+
+      $('#reports_form').submit(function(){
+          $('.reports-form button').attr('disabled', 'disabled');
+          $('.reports-form button').html('Generating Report...');
+          $.ajax({
+            url: $('#reports_form').attr('action'),
+            type: 'POST',
+            data: $('#reports_form').serialize(),
+            success: function(data){
+                $('#message').html(data);
+                $(".manual-box").eq(0).trigger('click');
+                $('[data-ride="datatables"]').dataTable( {
+                  "bRetrieve": true, 
+                  "sPaginationType": "full_numbers",
+                        "aaSorting": []
+                } );
+                $('.reports-form button').removeAttr('disabled');
+                $('.reports-form button').html('Generate');
+            }
+          });
+          return false;
+      });
+       
+    });
+</script>

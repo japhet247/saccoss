@@ -1,0 +1,109 @@
+{% extends "./includes/_layout.html.twig" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+
+{% block main %}
+
+    <header class="header bg-white b-b clearfix">
+        <div class="row m-t-sm">
+            <div class="col-sm-8 m-b-xs"> 
+                <h5 style="font-weight:bold;">{{ title }}</h5>
+            </div>
+        </div>
+    </header>
+  <section class="scrollable wrapper w-f">
+    <section class="panel panel-default" style="border: none;">
+      <div class="col-sm-8" style="margin-left: 17%;">
+        {{ message|raw }}
+            <form class="form-horizontal" method="post" action="{{ (municipal['municipal_id']) ? site_url('en/municipal/save/' ~ municipal['municipal_id']) : site_url('en/municipal/save') }}" data-validate="parsley">
+                <input type="hidden" name="" value="" />
+                <section class="panel panel-default">
+                    <header class="panel-heading"> {{ page_title }} <strong></strong> 
+                    </header>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Municipal Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="municipal_name"  class="form-control parsley-validated" value="{{ set_value('municipal_name', municipal['municipal_name']) }}" data-required="true" placeholder="ILALA">
+                                
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group branch" >
+                            <label class="col-sm-3 control-label">Municipal Region</label>
+                            <div class="col-sm-9">
+                              <select name="region"  style="width:100%" class="chosen-select form-control parsley-validated" data-required="true">
+                                <option value="">--Select One--</option>
+                                {% for region in regions %}
+                                <option value="{{ region['option_id'] }}"
+                                {% if region['option_id'] == municipal['region'] %}
+                                    {{ set_select('region', region['option_id'], TRUE) }}
+                                {% else %}
+                                    {{ set_select('region', region['option_id']) }}
+                                {% endif %}
+                                >{{ region['descrption']|upper }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group branch" >
+                            <label class="col-sm-3 control-label">Branch</label>
+                            <div class="col-sm-9">
+                              <select name="sortcode" id="branch"  style="width:100%" class="chosen-select form-control parsley-validated"  data-required="true">
+                                <option value="">--Select One--</option>
+                                  {% for b in branches %}
+                                      <option value="{{ b['sortcode'] }}" 
+                                      {% if b['sortcode'] == municipal['sortcode'] %}
+                                      {{ set_select('sortcode', b['sortcode'], TRUE) }}
+                                      {% else %}
+                                      {{ set_select('sortcode', b['sortcode']) }}
+                                      {% endif %}
+                                      >{{ b['branch_name']|upper }}</option>
+                                  {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                        
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Municipal Collection A/C</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="collection_account"  class="form-control parsley-validated" value="{{ set_value('collection_account', municipal['collection_account']) }}" data-required="true" placeholder="">
+                            </div>
+                        </div>
+                       
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Municipal Address</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="address"  class="form-control parsley-validated" value="{{ set_value('address', municipal['address']) }}" data-required="true" placeholder="">
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Municipal Telephone</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="telephone"  class="form-control parsley-validated" value="{{ set_value('telephone', municipal['telephone']) }}" data-required="true" placeholder="+255 22 000 0000">
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Municipal Fax</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="fax"  class="form-control parsley-validated" value="{{ set_value('fax', municipal['fax']) }}" data-required="true" placeholder="+255 22 000 0000">
+                            </div>
+                        </div>
+                       
+                         
+                    </div>
+                    <footer class="panel-footer text-right bg-light lter">
+                        <button type="submit" class="btn btn-primary btn-s-xs">Submit</button>
+                    </footer>
+                </section>
+            </form>
+        </div>
+    </section>
+</section>
+{% endblock %}

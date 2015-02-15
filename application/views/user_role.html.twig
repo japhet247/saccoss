@@ -1,0 +1,76 @@
+<div class="col-sm-12 scrollable" style="height: inherit;">
+<div class="col-sm-12" style="margin-top:20px;">
+  <section class="panel panel-default">
+    <header class="panel-heading">  <strong>{{ role['name'] }}</strong> 
+      {% if unauthorized %}
+        <div class="pull-right" style="margin-top:-5px;">
+          {% if activity_key == "edit" %}
+          {{ modal_btn('Authorize', "btn btn-primary btn-sm", "fa fa-check", "en/role/confirm/role/committ/" ~ role['role_id'] ~ "/" ~ activity_id) }}
+          {% else %} 
+          {{ modal_btn('Authorize', "btn btn-primary btn-sm", "fa fa-check", "en/role/confirm/role/authorize/" ~ role['role_id'] ~ "/" ~ activity_id) }}
+          {% endif %}
+          &nbsp;
+          {{ modal_btn('Reject', "btn btn-danger btn-sm", "fa fa-times", "en/activity/reject_form/" ~ activity_id) }}
+        </div>
+      {% elseif editable %}
+        <div class="pull-right" style="margin-top:-5px;">
+          <a href="{{ site_url("en/role/save/" ~ role['role_id']) }}" onclick="parent.closeFancyboxAndRedirectToUrl('{{ site_url("en/role/save/" ~ role['role_id']) }}');" class="btn btn-default btn-sm"><i class ="fa fa-pencil"></i>&nbsp;&nbsp; Edit</a>
+        </div>
+      {% endif %}
+    </header>
+    <header class="panel-heading"> <strong> Description : </strong>{{ role['description']|title }} </header>
+    {% for key, perm_category in permissions %}
+    <table class="table table-striped m-b-none">
+      <thead>
+        <tr>
+          <th>{{ key|title }} - Permissions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for perm in perm_category %}
+          <tr>
+            <td>{{ perm['permission']|title }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+  {% if activity_key == 'edit' and unauthorized %}
+    <div></div>
+    <header class="panel-heading"> <strong> CHANGES MADE </header>
+      {% for key, change in changes %}
+        {% if key != "permissions" %}
+          <table class="table table-striped m-b-none">
+            <tbody>
+                <tr>
+                  {% if key == "name" %}
+                    <td>Name : {{ change }}</td>
+                  {% else %}
+                    <td>Description : {{ change }}</td>
+                  {% endif %}
+                </tr>
+            </tbody>
+          </table>
+        {% else %}
+          <table class="table table-striped m-b-none">
+            <tbody>
+              {% for k, v in change %}
+                <tr>
+                  {% if k == "added" %}
+                  <td>Added Permissions</td>
+                  {% else %}
+                  <td>Removed Permissions</td>
+                  {% endif %}
+                </tr>
+                {% for p in v %}
+                  <tr><td style="font-weight: normal;">{{ p }}</td></tr>
+                {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+    {% endfor %}
+  {% endif %}
+  </section>
+</div>
+</div>

@@ -1,0 +1,32 @@
+{% extends "./includes/_layout.html.twig" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+
+{% block main %}
+
+    <header class="header bg-white b-b clearfix">
+        <div class="row m-t-sm">
+            <div class="col-sm-8 m-b-xs"> 
+                <h5 style="font-weight:bold;">{{ title }}</h5>
+            </div>
+        </div>
+    </header>
+  <section class="scrollable wrapper w-f">
+    <section class="panel panel-default" style="border: none;">
+      
+      
+        <div class="col-sm-12">
+        <section class="panel panel-default">
+  <header class="panel-heading"> <strong>{{ lang(table_title) }}</strong> <i class="fa fa-info-sign text-muted" data-toggle="tooltip" data-placement="bottom" data-title="ajax to load the data."></i> </header>
+  <div class="table-responsive">
+           {{ table|raw }}
+       </div>
+</section>
+        </div>
+       
+        
+    </section>
+</section>
+
+{% endblock %}

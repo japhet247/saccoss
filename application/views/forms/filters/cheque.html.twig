@@ -1,0 +1,97 @@
+<div class="form-group">
+    <label class="col-sm-3 control-label">Cheques Created from</label>
+    <div class="col-sm-9">
+        <input type="text" name="s_date_r"  class="form-control parsley-validated datepicker" value="{{ s_date_r }}" data-required="true" >
+        
+    </div>
+</div>
+<div class="line line-dashed b-b line-lg pull-in"></div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">Cheques Created to</label>
+    <div class="col-sm-9">
+        <input type="text" name="e_date_r"  class="form-control parsley-validated datepicker" value="{{ e_date_r }}" data-required="true" >
+        
+    </div>
+</div>
+<div class="line line-dashed b-b line-lg pull-in"></div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">Cheque Type</label>
+    <div class="col-sm-9">
+        <select name="cheque_type_r"  class="chosen-select form-control">
+        <option value="all">All</option>
+        {% for type in cheque_type %}
+            <option value="{{ type }}">{{ prepare_status(type)|raw }}</option>
+        {% endfor %}
+      </select>
+    </div>
+</div>
+
+{% if summary_cheques %}
+<div class="line line-dashed b-b line-lg pull-in"></div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">Status</label>
+    <div class="col-sm-9">
+        <select name="status_r"  class="chosen-select form-control">
+        <option value="all">All</option>
+        {% for status in cheque_status %}
+        	<option value="{{ status }}">{{ prepare_status(status)|raw }}</option>
+        {% endfor %}
+      </select>
+    </div>
+</div>
+{% endif %}
+
+{% if not is_municipal_user %}
+<div class="line line-dashed b-b line-lg pull-in"></div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">Municipal</label>
+    <div class="col-sm-9">
+        <select name="municipal_id_r"  class="chosen-select form-control">
+        <option value="all">All</option>
+        {% for municipal in municipals %}
+        	<option value="{{ municipal['municipal_id'] }}">{{ municipal['municipal_name'] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+</div>
+{% endif %}
+
+<div class="line line-dashed b-b line-lg pull-in"></div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">Uploaded By</label>
+    <div class="col-sm-9">
+        <select name="created_by_r"  class="chosen-select form-control">
+        <option value="all">All</option>
+        {% for maker in makers %}
+            <option value="{{ maker['user_id'] }}">{{ maker['full_name'] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+</div>
+{% if has_signatory %}
+<div class="line line-dashed b-b line-lg pull-in"></div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">Category A</label>
+    <div class="col-sm-9">
+        <select name="signatory_a_r"  class="chosen-select form-control">
+        <option value="all">All</option>
+        {% for sign in signatories %}
+            <option value="{{ sign['user_id'] }}">{{ sign['full_name'] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+</div>
+<div class="line line-dashed b-b line-lg pull-in"></div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">Category B</label>
+    <div class="col-sm-9">
+        <select name="signatory_b_r"  class="chosen-select form-control">
+        <option value="all">All</option>
+        {% for sign in signatories %}
+            <option value="{{ sign['user_id'] }}">{{ sign['full_name'] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+</div>
+{% endif %}

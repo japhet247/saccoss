@@ -1,0 +1,62 @@
+<header class="header bg-light lter clearfix b-b b-light">
+	<a href="#" class="btn btn-sm btn-success"><i class="i i-pencil"></i> Edit</a>
+	{{ modal_btn('Block','btn btn-danger btn-sm','fa fa-lock',"") }}
+	{{ modal_btn('Re-send Credentials', 'btn btn-warning btn-sm', 'fa fa-mail-forward',"") }}
+</header>
+<section class="vbox bg-white">
+	<section class="scrollable wrapper-lg">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="text-center">
+					<img style="width: 150px;" src="{{ base_url() }}admin/images/avatar_default.jpg" alt="..." class="img-circle m-b">
+
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h4 class="font-bold m-b-none m-t-none">{{ user['full_name']|upper }}</h4>
+				<p></p>
+				<p><i class="fa fa-lg fa-circle-o text-primary m-r-sm"></i><strong>{{ user['profile']|upper }} Profile</strong>
+				</p>
+				<ul class="nav nav-pills nav-stacked">
+					<li class="bg-light"><a href="#"><i class="i i-phone m-r-sm"></i> {{  user['mobile'] }} </a>
+					</li>
+					<li class="bg-light"><a href="#"><i class="i i-mail m-r-sm"></i> {{  user['email'] }}</a>
+					</li>
+					<li class="bg-light"><a href="#"><i class="fa fa-map-marker m-r-sm"></i> {{ user['address']|upper }} </a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+		<div class="line b-b m-t m-b"></div>
+
+		<div class="wrapper m-b">
+			<div class="row m-b">
+				<div class="col-xs-6"> <small>Device Phone Number</small>
+					<div class="text-lt font-bold">{{ user['device_mobile'] }}</div>
+				</div>
+				<div class="col-xs-6"> <small>Device IMEI</small>
+					<div class="text-lt font-bold">{{ user['device_imei'] }}</div>
+				</div>
+			</div>
+			<div class="row m-b">
+				<div class="col-xs-6"> <small>Supervisor</small>
+					<div class="text-lt font-bold">{{ user['supervisor']|upper }}</div>
+				</div>
+				<div class="col-xs-6"> <small>Device Serial Number</small>
+					<div class="text-lt font-bold">{{ user['device_sn'] }}</div>
+				</div>
+			</div>
+			<div class="row m-b">
+				<div class="col-xs-6"> <small>ID Type</small>
+					<div class="text-lt font-bold">{{ user['id_type']|upper }}</div>
+				</div>
+				<div class="col-xs-6"> <small>ID Number</small>
+					<div class="text-lt font-bold">{{ user['id_number'] }}</div>
+				</div>
+			</div>
+		</div>
+		<?php endif; ?>
+	</section>
+</section>

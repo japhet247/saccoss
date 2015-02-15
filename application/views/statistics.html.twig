@@ -1,0 +1,148 @@
+{% extends "includes/_layout.html.twig" %}
+
+{% block title %} {{ title|upper }} {% endblock %}
+
+{% block main %}
+
+	<header class="header bg-white b-b clearfix">
+        <div class="row m-t-sm">
+            <div class="col-sm-8 m-b-xs"> 
+                <h5 style="font-weight:bold;">{{ page_title }}</h5>
+            </div>
+        </div>
+    </header>
+
+
+
+	<section>
+        <section class="hbox stretch">
+            <section>
+                <section class="vbox">
+                  <section class="scrollable wrapper">
+                  		
+					<section class="panel panel-default">
+              <header class="panel-heading font-bold">Charges Commission</header>
+              <div class="panel-body">
+                <div id="flot-1ine" style="height:250px">
+                	<div class='flot-x-axis flot-x1-axis'>
+					    <div class='flot-tick-label'>Mon</div>
+					</div>
+					<div class='flot-x-axis flot-x2-axis'>
+					    <div class='flot-tick-label'>Tue</div>
+					</div>
+					<div class='flot-x-axis flot-x3-axis'>
+					    <div class='flot-tick-label'>Wed</div>
+					</div>
+					<div class='flot-x-axis flot-x4-axis'>
+					    <div class='flot-tick-label'>Thur</div>
+					</div>
+					<div class='flot-x-axis flot-x5-axis'>
+					    <div class='flot-tick-label'>Fri</div>
+					</div>
+                </div>
+              </div>
+              <!--<footer class="panel-footer bg-white">
+                <div class="row text-center no-gutter">
+                  <div class="col-xs-3 b-r b-light">
+                    <p class="h3 font-bold m-t">5,860</p>
+                    <p class="text-muted">Orders</p>
+                  </div>
+                  <div class="col-xs-3 b-r b-light">
+                    <p class="h3 font-bold m-t">10,450</p>
+                    <p class="text-muted">Sellings</p>
+                  </div>
+                  <div class="col-xs-3 b-r b-light">
+                    <p class="h3 font-bold m-t">21,230</p>
+                    <p class="text-muted">Items</p>
+                  </div>
+                  <div class="col-xs-3">
+                    <p class="h3 font-bold m-t">7,230</p>
+                    <p class="text-muted">Customers</p>
+                  </div>
+                </div>
+              </footer>-->
+            </section>
+
+				</section>
+            </section>
+          </section>
+        </section>
+    </section>
+
+{% endblock %}
+{% block script %}
+	{{ parent() }}
+	<!-- Sparkline Chart -->
+<script src="{{ base_url() }}admin/js/charts/sparkline/jquery.sparkline.min.js"></script>
+<!-- Easy Pie Chart -->
+<script src="{{ base_url() }}admin/js/charts/easypiechart/jquery.easy-pie-chart.js"></script>
+<!-- Flot -->
+<script src="{{ base_url() }}admin/js/charts/flot/jquery.flot.min.js"></script>
+<script src="{{ base_url() }}admin/js/charts/flot/jquery.flot.tooltip.min.js"></script>
+<script src="{{ base_url() }}admin/js/charts/flot/jquery.flot.resize.js"></script>
+<script src="{{ base_url() }}admin/js/charts/flot/jquery.flot.orderBars.js"></script>
+<script src="{{ base_url() }}admin/js/charts/flot/jquery.flot.pie.min.js"></script>
+<script src="{{ base_url() }}admin/js/charts/flot/jquery.flot.grow.js"></script>
+
+
+<script type="text/javascript">
+	$(function(){
+		var d1 = {{ line['data'] }};
+
+		$("#flot-1ine").length && $.plot($("#flot-1ine"), [{
+	          data: d1
+	      }], 
+	      {
+	        series: {
+	            lines: {
+	                show: true,
+	                lineWidth: 1,
+	                fill: true,
+	                fillColor: {
+	                    colors: [{
+	                        opacity: 0.3
+	                    }, {
+	                        opacity: 0.3
+	                    }]
+	                }
+	            },
+	            points: {
+	                radius: 3,
+	                show: true
+	            },
+	            grow: {
+	              active: true,
+	              steps: 50
+	            },
+	            shadowSize: 2
+	        },
+	        grid: {
+	            hoverable: true,
+	            clickable: true,
+	            tickColor: "#f0f0f0",
+	            borderWidth: 1,
+	            color: '#f0f0f0'
+	        },
+	        colors: ["#00b91e"], //["#1bb399"],
+	        xaxis:{
+	        	ticks: {{ line['ticks']|raw }},
+	        	
+	        },
+	        yaxis: {
+	          ticks: 5,
+	        },
+	        tooltip: true,
+	        tooltipOpts: {
+	          content: "Charge: %x.1 is %y.4",
+	          defaultTheme: false,
+	          shifts: {
+	            x: 0,
+	            y: 10
+	          }
+	        }
+	      }
+	  );
+	});
+</script>
+<script src="{{ base_url() }}admin/js/charts/flot/demo.js"></script>
+{% endblock %}

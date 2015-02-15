@@ -1,0 +1,87 @@
+<header class="header bg-light lter clearfix b-b b-light">
+	{% if editable %}
+		{% if has_permission('edit municipal') %}
+			<a href="{{ site_url("en/municipal/save/" ~ municipal['municipal_id']) }}" onclick="parent.closeFancyboxAndRedirectToUrl('{{ site_url("en/municipal/save/" ~ municipal['municipal_id']) }}');" class="btn btn-sm btn-success"><i class="i i-pencil"></i> Edit</a>
+		{% endif %}
+	{% endif %}
+	
+	{% if unauthorized %}
+        <div class="pull-right" style="margin-top:10px;">
+          {% if activity_key == "edit" %}
+          {{ modal_btn('Authorize', "btn btn-primary btn-sm", "fa fa-check", "en/municipal/confirm/municipal/committ/" ~ municipal['municipal_id'] ~ "/" ~ activity_id) }}
+          {% else %} 
+          {{ modal_btn('Authorize', "btn btn-primary btn-sm", "fa fa-check", "en/municipal/confirm/municipal/authorize/" ~ municipal['municipal_id'] ~ "/" ~ activity_id) }}
+          {% endif %}
+          &nbsp;
+          {{ modal_btn('Reject', "btn btn-danger btn-sm", "fa fa-times", "en/activity/reject_form/" ~ activity_id) }}
+        </div>
+    {% endif %}
+</header>
+<section class="scrollable hover bg-white">
+	<section class="wrapper-lg">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="text-center" style="font-size:100px;">
+					
+					<i class="fa fa-home"></i>
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h4 class="font-bold m-b-none m-t-none">{{ municipal['municipal_name']|upper }}</h4>
+				<p></p>
+				<ul class="nav nav-pills nav-stacked">
+					<li class="bg-light"><a href="#"> <strong>Mother Branch: </strong>&nbsp;{{  municipal['branch_name'] }} </a>
+					</li>
+					<li class="bg-light"><a href="#"><strong>Collection A/C:</strong> {{  municipal['collection_account'] }} </a>
+					</li>
+					<li class="bg-light"><a href="#"><strong>Telephone:</strong>  {{  municipal['telephone'] }} </a>
+					</li>
+					<li class="bg-light"><a href="#"><strong>Fax:</strong> {{  municipal['fax'] }}</a>
+					</li>
+					<li class="bg-light"><a href="#"><i class="fa fa-map-marker m-r-sm"></i> {{ municipal['address']|upper }} </a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+		<!--<div class="line b-b m-t m-b"></div>-->
+		{% if has_account %}
+			<div style="margin-top: 20px;"></div>
+			{% include "includes/table.html.twig" %}
+		{% endif %}
+		<div class="line b-b m-t m-b"></div>
+
+		<div class="wrapper m-b">
+			<div class="row m-b">
+				<div class="col-xs-6"> <small>Created By</small>
+					<div class="text-lt font-bold">{{ municipal['created_by']|upper }}</div>
+				</div>
+				<div class="col-xs-6"> <small>Date Created</small>
+					<div class="text-lt font-bold">{{ prepare_date(municipal['created']) }}</div>
+				</div>
+			</div>
+			{% if not unauthorised %}
+				<div class="row m-b">
+					<div class="col-xs-6"> <small>Authorised By</small>
+						<div class="text-lt font-bold">{{ municipal['authorised_by']|upper }}</div>
+					</div>
+					<div class="col-xs-6"> <small>Date Authorised</small>
+						<div class="text-lt font-bold">{{ prepare_date(municipal['authorised']) }}</div>
+					</div>
+				</div>
+			{% endif %}
+			{% if rejected %}
+				<div class="row m-b">
+					<div class="col-xs-6"> <small>Rejected By</small>
+						<div class="text-lt font-bold">{{ municipal['rejected_by']|upper }}</div>
+					</div>
+					<div class="col-xs-6"> <small>Date Rejected</small>
+						<div class="text-lt font-bold">{{ prepare_date(municipal['rejected']) }}</div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+		
+	</section>
+</section>

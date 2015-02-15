@@ -1,0 +1,94 @@
+{% extends "./includes/_layout.html.twig" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+
+{% block main %}
+
+    <header class="header bg-white b-b clearfix">
+        <div class="row m-t-sm">
+            <div class="col-sm-8 m-b-xs"> 
+                <h5 style="font-weight:bold;">{{ title }}</h5>
+            </div>
+        </div>
+    </header>
+  <section class="scrollable wrapper w-f">
+    <section class="panel panel-default" style="border: none;">
+      <div class="col-sm-8" style="margin-left: 17%;">
+            {{ message | raw }}
+            <form class="form-horizontal" method="post" action="
+            {{ (account['account_id']) ? site_url('en/account/save/' ~ account['account_id']) : site_url('en/account/save') }}" data-validate="parsley">
+                
+                <section class="panel panel-default">
+                    <header class="panel-heading"> {{ page_title }} <strong></strong> 
+                    </header>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Account name</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="account_name" value ="{{ set_value('account_name', account['account_name']) }}" class="form-control parsley-validated"  data-required="true" placeholder="ROAD FUND">
+                                
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Account Number</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="account" class="form-control parsley-validated"  data-required="true" value ="{{ set_value('account', account['account']) }}" >
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group branch" >
+                            <label class="col-sm-3 control-label">Municipal</label>
+                            <div class="col-sm-9">
+                              <select name="municipal_id" id="municipal"  style="width:100%" class="chosen-select form-control parsley-validated"  data-required="true">
+                                <option value="">--Select One--</option>
+                                {% for region, muns in municipals %}
+                                    <optgroup label="{{ region }}">
+                                        {% for m in muns %}
+                                            <option value="{{ m['municipal_id'] }}" 
+                                            {% if m['municipal_id'] == account['municipal_id'] %}
+                                            {{ set_select('municipal_id', m['municipal_id'], TRUE) }}
+                                            {% else %}
+                                            {{ set_select('municipal_id', m['municipal_id']) }}
+                                            {% endif %}
+                                            >{{ m['municipal_name'] }}</option>
+                                        {% endfor %}
+                                    </optgroup>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                        <div id="signatory">
+                          {% include 'includes/signatory.html.twig' %}
+                        </div>
+                         
+                    </div>
+                    <footer class="panel-footer text-right bg-light lter">
+                        <button type="submit" class="btn btn-primary btn-s-xs">Submit</button>
+                    </footer>
+                </section>
+            </form>
+        </div>
+    </section>
+</section>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#municipal').on('change', function(){
+        value = $('#municipal :selected').val();
+        loading_gif('#signatory', '69%', '45%');
+        $.ajax({
+          data : {municipal_id : value},
+          url : "{{ site_url('en/user/get_signatory') }}",
+          type : 'POST',
+          success : function(data){
+              $('#signatory').html(data);
+          }
+        })
+    });//end on
+  });
+</script>
+{% endblock %}
+

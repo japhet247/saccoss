@@ -1,0 +1,95 @@
+{% extends "./includes/_layout.html.twig" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+
+{% block main %}
+
+    <header class="header bg-white b-b clearfix">
+        <div class="row m-t-sm">
+            <div class="col-sm-8 m-b-xs"> 
+                <h5 style="font-weight:bold;">{{ title }}</h5>
+            </div>
+        </div>
+    </header>
+  <section class="scrollable wrapper w-f">
+    <section class="panel panel-default" style="border: none;">
+      <div class="col-sm-8" style="margin-left: 17%;">
+                {{ message|raw }}
+                <form class="form-horizontal" method="post" action="#" data-validate="parsley">
+                    <section class="panel panel-default">
+                    <header class="panel-heading"> {{ page_title }} <strong></strong> 
+                    </header>
+                    <div class="panel-body">
+
+                        <div class="form-group branch" >
+                            <label class="col-sm-3 control-label">Choose Teller A/C</label>
+                            <div class="col-sm-9">
+                              <select name="teller_account"  style="width:100%" class="chosen-select form-control parsley-validated" data-required="true">
+                                <option value="">--Select One--</option>
+                                {% for teller in tellers %}
+                                    <option value="{{ teller['teller_account'] }}" 
+                                    {% if teller['teller_account'] == assignment['teller_account'] %}
+                                      {{ set_select('teller_account', teller['teller_account'], TRUE) }}
+                                    {% else %}
+                                      {{ set_select('teller_account', teller['teller_account']) }}
+                                    {% endif %}
+                                    >{{ teller['full_name'] ~ ' - ' ~ teller['teller_account'] }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                          <div class="line line-dashed b-b line-lg pull-in"></div>
+                          <div class="form-group branch" >
+                            <label class="col-sm-3 control-label">Choose POS</label>
+                            <div class="col-sm-9">
+                              <select name="pos_id"  style="width:100%" class="chosen-select form-control parsley-validated" data-required="true">
+                                <option value="">--Select One--</option>
+                                {% for pos in terminals %}
+                                    <option value="{{ pos['pos_id'] }}" 
+                                    {% if pos['pos_id'] == assignment['pos_id'] %}
+                                      {{ set_select('pos_id', pos['pos_id'], TRUE) }}
+                                    {% else %}
+                                      {{ set_select('pos_id', pos['pos_id']) }}
+                                    {% endif %}
+                                    >{{ pos['pos_name'] }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                          <div class="line line-dashed b-b line-lg pull-in"></div>
+                          <div class="form-group branch" >
+                            <label class="col-sm-3 control-label">Set Teller Limit</label>
+                            <div class="col-sm-9">
+                              <select name="teller_limit"  style="width:100%" class="chosen-select form-control parsley-validated" data-required="true">
+                                <option value="">--Select One--</option>
+                                {% for limit in range(1, 10) %}
+                                    <option value="{{ prepare_limit(limit) }}" 
+                                    {{ set_select('teller_limit', assignment['teller_limit']) }}
+                                    >{{ limit }} Million</option>
+                                {% endfor %}
+                                {% for limit in range(low = 15, high = 30, step = 5) %}
+                                    <option value="{{ prepare_limit(limit) }}" 
+                                    {{ set_select('teller_limit', assignment['teller_limit']) }}
+                                    >{{ limit }} Million</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                      </div>
+                        <footer class="panel-footer text-right bg-light lter">  
+                            <button type="submit" class="btn btn-primary btn-s-xs">Submit</button>
+                        </footer>
+                </form>
+        </section>
+            </div>
+        
+    </section>
+</section>
+
+{% endblock %}
+
+{% block script %}
+    {{ parent() }}
+    <script src="{{ base_url() }}admin/js/file-input/bootstrap-filestyle.min.js"></script>
+{% endblock %}

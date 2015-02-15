@@ -1,0 +1,46 @@
+{% block status_bar %}
+
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="panel b-a">
+                <div class="row m-n">
+                    <div class="col-md-4 b-b b-r">
+                        <a href="{{ tabs['first']['link'] }}" class="block padder-v hover"> <span class="i-s i-s-2x pull-left m-r-sm"> <i class="i i-hexagon2 i-s-base text-crdb hover-rotate 
+                        	{{ tabs['first']['class'] }}" style="color: #00b91e;"></i> <i class="i 
+                        	{{ tabs['first']['icon'] }} i-1x text-white"></i> </span>  <span class="clear"> <span class="h3 block m-t-xs text-crdb" style="color: #00b91e;">
+                        	{{ tabs['first']['value'] }}</span>  <small class="text-muted text-u-c">
+                        	{{ tabs['first']['status'] }}</small> 
+                            </span>
+                        </a>
+                    </div>
+                    <div class="col-md-4 b-b b-r">
+                        <a href="{{ tabs['second']['link'] }}" class="block padder-v hover"> <span class="i-s i-s-2x pull-left m-r-sm"> <i class="i i-hexagon2 i-s-base text-success-lt hover-rotate
+                        	{{ tabs['second']['class'] }}"></i> <i class="i 
+                        	{{ tabs['second']['icon'] }} i-sm text-white"></i> </span>  <span class="clear"> <span class="h3 block m-t-xs text-success">
+                        	{{ tabs['second']['value'] }}</span>  <small class="text-muted text-u-c">
+                        	{{ tabs['second']['status'] }}<span class="text-sm"style="text-transform: lowercase;">s</span></small> 
+                            </span>
+                        </a>
+                    </div>
+                    <div class="col-md-4 b-b">
+                        <a href="{{ tabs['third']['link'] }}" class="block padder-v hover"> <span class="i-s i-s-2x pull-left m-r-sm"> <i class="i i-hexagon2 i-s-base text-info hover-rotate {{ tabs['third']['class'] }}"></i> <i class="i 
+                        	{{ tabs['third']['icon'] }} i-sm text-white"></i> </span>  <span class="clear"> <span class="h3 block m-t-xs text-info">
+                        	{{ tabs['third']['value'] }}</span> <small class="text-muted text-u-c">
+                        	{{ tabs['third']['status'] }}<span class="text-sm" style="text-transform: lowercase;">s</span></small> 
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block menus %}
+
+	{% for link in dashboard_links %}
+		{% include ""%}
+	{% endfor %}
+
+{% endblock %}
