@@ -125,6 +125,8 @@ $config[CHEQUE_MAKER] = array('tabs' => FALSE,
 			'dashboard_links' => array(
 	            array('name'=>"Add Cheque File",'url' =>site_url('en/cheque/add'), 'icon' =>"i-file-plus", 'class'=>"text-primary-lt"),
 	            array('name'=>"view Cheque Files",'url' =>site_url('en/cheque/files'), 'icon' =>"i-file-copy", 'class'=>"text-info-lt"),
-	           
+	            array('name'=>"view Cheque Files",'url' =>site_url('en/cheque/files'), 'icon' =>"i-file-copy", 'class'=>"text-info-lt"),
+				 array('name'=>"view Cheque Files",'url' =>site_url('en/cheque/files'), 'icon' =>"i-file-copy", 'class'=>"text-info-lt"),
+				  array('name'=>"view Cheque Files",'url' =>site_url('en/cheque/files'), 'icon' =>"i-file-copy", 'class'=>"text-info-lt"),
         	),
 		);
