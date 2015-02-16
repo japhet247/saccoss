@@ -48,14 +48,14 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '.\TMSSQLSERVER';
-$db['default']['username'] = 'possecure00';
-$db['default']['password'] = 'SecurePos!@#2';
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'root';
+$db['default']['password'] = '';
 
 
-$db['default']['database'] = 'postms';
-$db['default']['dbdriver'] = 'sqlsrv';
-$db['default']['dbprefix'] = 'dbp_';
+$db['default']['database'] = 'mfi_system_db';
+$db['default']['dbdriver'] = 'mysql';
+$db['default']['dbprefix'] = 'db_mfi_';
 $db['default']['pconnect'] = FALSE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;
@@ -66,27 +66,6 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-
-//$db['default']['hostname'] = '192.168.131.201';
-//$db['default']['hostname'] = '192.168.151.89';
-$db['sms']['hostname'] = '192.168.131.201';
-$db['sms']['username'] = 'test';
-$db['sms']['password'] = 'test123@';
-
-//$db['default']['database'] = 'proxy';
-
-$db['sms']['database'] = 'proxy';
-$db['sms']['dbdriver'] = 'sqlsrv';
-$db['sms']['dbprefix'] = '';
-$db['sms']['pconnect'] = FALSE;
-$db['sms']['db_debug'] = TRUE;
-$db['sms']['cache_on'] = FALSE;
-$db['sms']['cachedir'] = '';
-$db['sms']['char_set'] = 'utf8';
-$db['sms']['dbcollat'] = 'utf8_general_ci';
-$db['sms']['swap_pre'] = '';
-$db['sms']['autoinit'] = TRUE;
-$db['sms']['stricton'] = FALSE;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

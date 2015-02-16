@@ -109,7 +109,7 @@ $autoload['language'] = array('main');
 |
 */
 
-$autoload['model'] = array('api/my_api', 'user_m','robot/my_robot','api/ubgateway_m','sms','stats_m');
+$autoload['model'] = array();
 
 
 /* End of file autoload.php */

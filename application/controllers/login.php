@@ -5,11 +5,11 @@ class Login extends CI_Controller {
 
     function __construct() {
 		parent::__construct();
-        $this->load->model('user_m');
+        //$this->load->model('user_m');
 	}
     
     function index(){
-            //clear expired attempts
+            /*//clear expired attempts
             $this->load->model('login_attempt_m', 'attempt');
             $this->attempt->clear_expired();
             if($this->form_validation->run('login_form') == FALSE){
@@ -44,7 +44,8 @@ class Login extends CI_Controller {
                     redirect('en/dashboard');  
                 }
                 
-            }
+            }*/
+			$this->twig->display('login.html.twig');
         
     }
     
@@ -66,7 +67,7 @@ class Login extends CI_Controller {
         }else show_error('Invalid Activation key', 403);
     }
     
-    function reset(){
+    /*function reset(){
         $user_id = $this->session->userdata('user_reset_id');
         $this->load->model('user_activation_m', 'activate');
         if($user_id){
@@ -75,7 +76,7 @@ class Login extends CI_Controller {
                if($this->login_m->reset_password($user_id)){
                     $this->session->sess_destroy();
                     
-                    /*//force the log audit trail
+                   //force the log audit trail
                     
                     $trail_data = array(
                                             'user_id'=>$user_id,
@@ -86,7 +87,7 @@ class Login extends CI_Controller {
                                             'uri'=>uri_string(),
                                             'ip'=>get_client_ip()
                                         );
-                    $this->db->insert('audit_trail', $trail_data);*/
+                    $this->db->insert('audit_trail', $trail_data);
                     $this->activate->remove_key('user_id', $user_id);
                     $data['message'] = $this->login_m->custom_msg('Password Reset Success. Please Login');
                     $data['title'] = 'Success';
@@ -103,7 +104,7 @@ class Login extends CI_Controller {
         }else{
             show_error('Access Denied',403);
         }
-    }
+    }*/
     
     function forget(){
         $link = $this->uri->segment(4);
