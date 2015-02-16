@@ -45,7 +45,7 @@ class Login extends CI_Controller {
                 }
                 
             }*/
-			$this->twig->display('login.html.twig');
+			$this->load->view('welcome_message');
         
     }
     
